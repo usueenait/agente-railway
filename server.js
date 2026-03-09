@@ -12,6 +12,8 @@ app.get("/", (req, res) => {
   res.send("Agente online");
 });
 
+console.log("OPENAI_API_KEY existe:", !!process.env.OPENAI_API_KEY);
+
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.post("/chat", async (req, res) => {
