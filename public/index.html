@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>Mi Agente</title>
+  <!-- Importante para móvil -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
     * { box-sizing: border-box; }
+
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       margin: 0;
@@ -13,33 +17,47 @@
       color: #f5f5f5;
       height: 100vh;
       display: flex;
-      align-items: center;
+      align-items: stretch; /* mejor para móvil */
       justify-content: center;
     }
+
     .container {
       width: 100%;
       max-width: 800px;
-      height: 90vh;
+      height: 100vh;              /* ocupa toda la altura */
+      max-height: 900px;          /* tope en escritorio grande */
       background: #151518;
-      border-radius: 20px;
+      border-radius: 0;           /* sin bordes en móvil */
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
       display: flex;
       flex-direction: column;
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
+
+    @media (min-width: 768px) {
+      .container {
+        margin: 20px;
+        height: calc(100vh - 40px);
+        border-radius: 20px;
+      }
+    }
+
     .header {
-      padding: 14px 20px;
+      padding: 14px 16px;
       background: linear-gradient(90deg, #4f46e5, #7c3aed);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-shrink: 0;
     }
+
     .header-left {
       display: flex;
       align-items: center;
       gap: 10px;
     }
+
     .avatar {
       width: 32px;
       height: 32px;
@@ -47,14 +65,17 @@
       background: radial-gradient(circle at 30% 20%, #fff 0, #ffd54f 15%, #f97316 40%, #7c3aed 100%);
       box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
     }
+
     .title {
       font-size: 16px;
       font-weight: 600;
     }
+
     .subtitle {
       font-size: 12px;
       opacity: 0.85;
     }
+
     .status-dot {
       width: 10px;
       height: 10px;
@@ -63,63 +84,78 @@
       box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
       margin-right: 6px;
     }
+
     .status {
       display: flex;
       align-items: center;
       font-size: 12px;
       opacity: 0.9;
     }
+
     #chat {
       flex: 1;
-      padding: 16px 18px;
+      padding: 10px 10px 12px;
       overflow-y: auto;
       background: radial-gradient(circle at top left, #1f2937 0, #020617 60%);
     }
+
     .msg {
       margin-bottom: 10px;
       display: flex;
     }
+
     .msg.user {
       justify-content: flex-end;
     }
+
     .msg.bot {
       justify-content: flex-start;
     }
+
     .bubble {
-      max-width: 75%;
-      padding: 10px 12px;
+      max-width: 80%;
+      padding: 8px 10px;
       border-radius: 14px;
       line-height: 1.4;
       font-size: 14px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
+
     .bubble.user {
       background: linear-gradient(135deg, #4f46e5, #6366f1);
       border-bottom-right-radius: 4px;
     }
+
     .bubble.bot {
       background: #020617;
       border: 1px solid rgba(148, 163, 184, 0.4);
       border-bottom-left-radius: 4px;
     }
+
     .bubble small {
       display: block;
       font-size: 11px;
       opacity: 0.7;
       margin-bottom: 2px;
     }
+
     .input-area {
-      padding: 10px 12px;
+      padding: 8px 10px;
       background: #020617;
       border-top: 1px solid rgba(148, 163, 184, 0.3);
       display: flex;
       flex-direction: column;
       gap: 6px;
+      flex-shrink: 0;
     }
+
     .row {
       display: flex;
       gap: 8px;
     }
+
     #message, #extra {
       flex: 1;
       padding: 9px 10px;
@@ -130,20 +166,24 @@
       font-size: 13px;
       outline: none;
     }
+
     #message::placeholder, #extra::placeholder {
       color: #6b7280;
     }
+
     #message:focus, #extra:focus {
       border-color: #6366f1;
       box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.3);
     }
+
     #image {
       flex: 1;
       font-size: 12px;
       color: #e5e7eb;
     }
+
     button {
-      padding: 0 16px;
+      padding: 0 14px;
       border-radius: 999px;
       border: none;
       background: linear-gradient(135deg, #4f46e5, #7c3aed);
@@ -157,147 +197,27 @@
       box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
       white-space: nowrap;
     }
+
     button:hover {
       filter: brightness(1.07);
     }
+
     button:active {
       transform: translateY(1px);
       box-shadow: 0 4px 10px rgba(79, 70, 229, 0.5);
     }
+
     .send-icon {
       font-size: 16px;
     }
+
     .hint {
       font-size: 11px;
       color: #9ca3af;
       text-align: right;
       padding-right: 4px;
     }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <div class="header-left">
-        <div class="avatar"></div>
-        <div>
-          <div class="title">Mi agente personal</div>
-          <div class="subtitle">Chat con texto, datos y visión</div>
-        </div>
-      </div>
-      <div class="status">
-        <div class="status-dot"></div>
-        Online
-      </div>
-    </div>
 
-    <div id="chat"></div>
+    /* Ajustes específicos para pantallas pequeñas */
+    @media (max-width:
 
-    <div class="input-area">
-      <div class="row">
-        <input id="message" type="text" placeholder="Escribe tu mensaje..." />
-      </div>
-      <div class="row">
-        <input id="extra" type="text" placeholder="Datos extra (opcional, JSON o texto)..." />
-      </div>
-      <div class="row">
-        <input id="image" type="file" accept="image/*" />
-        <button id="send">
-          <span class="send-icon">➤</span>
-          Enviar
-        </button>
-      </div>
-      <div class="hint">Puedes enviar solo texto, solo imagen, o ambos.</div>
-    </div>
-  </div>
-
-  <script>
-    const chat = document.getElementById("chat");
-    const input = document.getElementById("message");
-    const extraInput = document.getElementById("extra");
-    const imageInput = document.getElementById("image");
-    const sendBtn = document.getElementById("send");
-
-    function addMessage(author, text) {
-      const wrapper = document.createElement("div");
-      wrapper.classList.add("msg", author);
-
-      const bubble = document.createElement("div");
-      bubble.classList.add("bubble", author);
-
-      const label = author === "user" ? "Tú" : "Agente";
-      bubble.innerHTML = `<small>${label}</small>${text}`;
-
-      wrapper.appendChild(bubble);
-      chat.appendChild(wrapper);
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result); // data:image/...;base64,XXXX
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    async function sendMessage() {
-      const text = input.value.trim();
-      const extraText = extraInput.value.trim();
-      const file = imageInput.files[0] || null;
-
-      if (!text && !file) return;
-
-      if (text) {
-        addMessage("user", text);
-      } else if (file) {
-        addMessage("user", "[Imagen enviada]");
-      }
-
-      input.value = "";
-      imageInput.value = "";
-
-      let extraData = null;
-      if (extraText) {
-        try {
-          extraData = JSON.parse(extraText);
-        } catch {
-          extraData = { raw: extraText };
-        }
-      }
-
-      let imageBase64 = null;
-      if (file) {
-        imageBase64 = await fileToBase64(file);
-      }
-
-      try {
-        const res = await fetch("/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message: text,
-            data: extraData,
-            imageBase64
-          })
-        });
-        const data = await res.json();
-        addMessage("bot", data.reply || "(Sin respuesta)");
-      } catch (e) {
-        addMessage("bot", "Error al contactar con el agente");
-      }
-    }
-
-    sendBtn.addEventListener("click", sendMessage);
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") sendMessage();
-    });
-    extraInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") sendMessage();
-    });
-
-    addMessage("bot", "Hola, soy tu agente. Escríbeme o súbeme una imagen para que la analice.");
-  </script>
-</body>
-</html>
