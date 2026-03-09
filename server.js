@@ -7,6 +7,11 @@ const app = express();
 app.use(express.json({ limit: "10mb" })); // importante para imágenes base64
 app.use(express.static(path.join(__dirname, "public")));
 
+// Ruta simple para comprobar que la app está viva
+app.get("/", (req, res) => {
+  res.send("Agente online");
+});
+
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.post("/chat", async (req, res) => {
