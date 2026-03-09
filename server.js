@@ -52,7 +52,7 @@ Describe con precisión lo que veas en la imagen si la hay.
     }
 
     const response = await client.chat.completions.create({
-      model: "gpt-4.1-mini", // asegúrate de que tu cuenta soporta visión con este modelo
+      model: "gpt-4.1", // asegúrate de que tu cuenta soporta visión con este modelo
       messages: [
         { role: "system", content: systemPrompt },
         {
