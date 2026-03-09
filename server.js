@@ -1,7 +1,6 @@
 const express = require("express");
 const OpenAI = require("openai");
 const path = require("path");
-require("dotenv").config();
 
 const app = express();
 app.use(express.json({ limit: "10mb" })); // importante para imágenes base64
@@ -11,8 +10,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => {
   res.send("Agente online");
 });
-
-console.log("OPENAI_API_KEY existe:", !!process.env.OPENAI_API_KEY);
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -54,7 +51,7 @@ Describe con precisión lo que veas en la imagen si la hay.
     }
 
     const response = await client.chat.completions.create({
-      model: "gpt-4.1", // asegúrate de que tu cuenta soporta visión con este modelo
+      model: "gpt-4.1",
       messages: [
         { role: "system", content: systemPrompt },
         {
